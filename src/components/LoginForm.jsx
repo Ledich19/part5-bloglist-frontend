@@ -1,10 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const LoginForm = ({ username, password, chengeeUsername, chengeePassword, onSubmit }) => {
+const LoginForm = ({ login }) => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const handlChengeeUsername = (e) => setUsername(e.target.value)
+  const handlChengeePassword = (e) => setPassword(e.target.value)
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    const user = { username, password }
+    login(user)
+    setUsername('')
+    setPassword('')
+  }
+
   return (
     <div>
       <h2>Log in to application</h2>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleLogin}>
         <div>
           username
           <input
@@ -12,7 +24,7 @@ const LoginForm = ({ username, password, chengeeUsername, chengeePassword, onSub
             type="text"
             value={username}
             name="Username"
-            onChange={chengeeUsername}
+            onChange={handlChengeeUsername}
           />
         </div>
         <div>
@@ -22,7 +34,7 @@ const LoginForm = ({ username, password, chengeeUsername, chengeePassword, onSub
             type="password"
             value={password}
             name="Password"
-            onChange={chengeePassword}
+            onChange={handlChengeePassword}
           />
         </div>
         <button type="submit">login</button>

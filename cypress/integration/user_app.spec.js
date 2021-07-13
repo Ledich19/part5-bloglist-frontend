@@ -95,7 +95,7 @@ describe('Blog app', function () {
         .get('.blog').should('not.contain', 'remove')
     })
 
-    it.only('blogs are ranked by likes from highest to lowest', function () {
+    it('blogs are ranked by likes from highest to lowest', function () {
       const blogs = [{
         title: 'first blog',
         author: 'Michael Chan',

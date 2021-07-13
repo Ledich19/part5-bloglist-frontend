@@ -8,8 +8,6 @@ import loginService from './services/login'
 import Togglable from './components/Togglable'
 
 const App = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState([])
   const [infoMessage, setInfoMessage] = useState(null)
@@ -17,8 +15,6 @@ const App = () => {
   const blogFormRef = useRef()
 
   const blogsSort = [...blogs.sort((a,b) => b.likes - a.likes)]
-  const handlChengeeUsername = (e) => setUsername(e.target.value)
-  const handlChengeePassword = (e) => setPassword(e.target.value)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -35,8 +31,7 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  const handleLogin = async ({ username, password }) => {
     try {
       const user = await loginService.login({ username, password })
       window.localStorage.setItem(
@@ -44,8 +39,6 @@ const App = () => {
       )
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
       setInfoMessage('login ;)')
       setTimeout(() => {
         setInfoMessage(null)
@@ -63,39 +56,27 @@ const App = () => {
   }
   const handleAddBlog = async (blog) => {
     blogFormRef.current.toggleVisibility()
-    try {
-      const returnedBlog = await blogService.create(blog)
-      const newBlog = { ...returnedBlog, user: { name: user.name, username: user.username } }
-      setBlogs(blogs.concat(newBlog))
-      setInfoMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author}`)
-      setTimeout(() => {
-        setInfoMessage(null)
-      }, 5000)
-    } catch (exception) {
-      console.log('oooooooooooooooooooo')
-    }
+    const returnedBlog = await blogService.create(blog)
+    const newBlog = { ...returnedBlog, user: { name: user.name, username: user.username } }
+    setBlogs(blogs.concat(newBlog))
+    setInfoMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author}`)
+    setTimeout(() => {
+      setInfoMessage(null)
+    }, 5000)
   }
   const handleLike = async (id) => {
-    try {
-      const blog = blogs.find((blog) => blog.id === id)
-      const newBlog = { ...blog,user: user.id,likes: blog.likes+ 1 }
-      const apdateBlog = await blogService.update(id,newBlog)
-      const newBlogs = blogs.map((blog) => blog.id === id ? { ...blog,likes: apdateBlog.likes }: blog)
-      setBlogs(newBlogs)
-    } catch (exception) {
-      console.log('oooooooooooooooooooo')
-    }
+    const blog = blogs.find((blog) => blog.id === id)
+    const newBlog = { ...blog,user: user.id,likes: blog.likes+ 1 }
+    const apdateBlog = await blogService.update(id,newBlog)
+    const newBlogs = blogs.map((blog) => blog.id === id ? { ...blog,likes: apdateBlog.likes }: blog)
+    setBlogs(newBlogs)
   }
   const handleDeleteBlog = async (id, title, author) => {
     const confirm = window.confirm(`Remove blog ${title} by ${author}?`)
     if (confirm) {
-      try {
-        await blogService.remove(id)
-        const newBlogs = blogs.filter(b => b.id !== id)
-        setBlogs(newBlogs)
-      } catch (exception) {
-        console.log('oooooooooooooooooooo')
-      }
+      await blogService.remove(id)
+      const newBlogs = blogs.filter(b => b.id !== id)
+      setBlogs(newBlogs)
     }
   }
 
@@ -107,11 +88,7 @@ const App = () => {
           errorMessage={errorMessage}
         />
         <LoginForm
-          username={username}
-          password={password}
-          chengeeUsername={handlChengeeUsername}
-          chengeePassword={handlChengeePassword}
-          onSubmit={handleLogin}
+          login={handleLogin}
         />
       </div>
     )
