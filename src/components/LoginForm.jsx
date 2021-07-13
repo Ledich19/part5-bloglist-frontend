@@ -3,10 +3,12 @@ import React from 'react'
 const LoginForm = ({ username, password, chengeeUsername, chengeePassword, onSubmit }) => {
   return (
     <div>
-      <form  onSubmit={onSubmit}>
+      <h2>Log in to application</h2>
+      <form onSubmit={onSubmit}>
         <div>
           username
           <input
+            id='username'
             type="text"
             value={username}
             name="Username"
@@ -16,6 +18,7 @@ const LoginForm = ({ username, password, chengeeUsername, chengeePassword, onSub
         <div>
           password
           <input
+            id='password'
             type="password"
             value={password}
             name="Password"

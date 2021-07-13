@@ -20,19 +20,19 @@ test('form',() => {
   const blogForm = component.container.querySelector('#blogForm')
 
   fireEvent.change(title,{
-    target:{ value: 'React patterns' }
+    target:{ value: blog.title }
   })
   fireEvent.change(author,{
-    target:{ value: 'Michael Chan' }
+    target:{ value: blog.author }
   })
   fireEvent.change(url,{
-    target: { value: 'https://reactpatterns.com/' }
+    target: { value: blog.url }
   })
 
   fireEvent.submit(blogForm)
 
   expect(createBlog.mock.calls).toHaveLength(1)
-  expect(createBlog.mock.calls[0][0].title).toBe('React patterns')
-  expect(createBlog.mock.calls[0][0].author).toBe('Michael Chan')
-  expect(createBlog.mock.calls[0][0].url).toBe('https://reactpatterns.com/')
+  expect(createBlog.mock.calls[0][0].title).toBe(blog.title)
+  expect(createBlog.mock.calls[0][0].author).toBe(blog.author)
+  expect(createBlog.mock.calls[0][0].url).toBe(blog.url)
 })

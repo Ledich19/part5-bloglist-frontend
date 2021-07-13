@@ -8,8 +8,8 @@ import loginService from './services/login'
 import Togglable from './components/Togglable'
 
 const App = () => {
-  const [username, setUsername] = useState('Aleksandr')
-  const [password, setPassword] = useState('55555')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState([])
   const [infoMessage, setInfoMessage] = useState(null)
@@ -67,7 +67,7 @@ const App = () => {
       const returnedBlog = await blogService.create(blog)
       const newBlog = { ...returnedBlog, user: { name: user.name, username: user.username } }
       setBlogs(blogs.concat(newBlog))
-      setInfoMessage(`a new blog ${returnedBlog.title}  by ${returnedBlog.author}`)
+      setInfoMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author}`)
       setTimeout(() => {
         setInfoMessage(null)
       }, 5000)
@@ -102,7 +102,6 @@ const App = () => {
   if (user === null){
     return (
       <div>
-        <h2>Log in to application</h2>
         <Notification
           infoMessage={infoMessage}
           errorMessage={errorMessage}
